@@ -12,7 +12,7 @@ require_relative '../spec/11a_shared_example_spec'
 # 2. Review the tests in spec/11a_shared_example_spec.rb
 # 3. Complete either spec/11b_cat_spec.rb or spec/11c_dog_spec.rb
 
-describe Cat do
+describe Cat do 
   subject(:oscar) { described_class.new('Oscar', 'Maine Coon') }
 
   # Before you begin this file, make sure you have read the shared
@@ -35,17 +35,20 @@ end
 
 describe Cat do
   # Create a subject with your choice of cat name and optional breed/color.
-
+  subject(:paws) { described_class.new('paws', 'British Shorthair') }
   # Write a test using the second shared_example to test that cat responds to
   # talk ('meow').
-  context '' do
+  context 'when cat responds to talk (meow)' do
+   include_examples 'shared method name'
   end
 
   # remove the 'x' before running this test
-  xit 'is not hungry' do
+  it 'is not hungry' do
+    expect(paws).to_not be_hungry
   end
 
   # remove the 'x' before running this test
-  xit 'is hiding' do
+  it 'is hiding' do
+    expect(paws).to be_hiding
   end
 end

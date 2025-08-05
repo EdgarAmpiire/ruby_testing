@@ -7,7 +7,7 @@ class Pet
   def initialize(name, breed = nil, color = nil)
     @name = name
     @breed = breed
-    @color = color
+    @color = color 
   end
 
   def meal_time

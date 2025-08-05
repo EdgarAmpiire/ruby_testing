@@ -13,7 +13,7 @@ require_relative '../lib/13_input_output'
 # than the other.
 
 # One key difference between the two is that NumberGame has smaller,
-# isolated methods.
+# isolated methods. 
 
 # Small and isolated methods that only do one thing are easier to test.
 # Long methods are like a run-on sentence that should have been divided into 2 or 3 different sentences so that everything could be clearly understood and in this case if a method does many different things it can be difficult to test.
@@ -48,10 +48,13 @@ describe NumberGame do
       # Write a similar test to the one above, that uses a custom matcher
       # instead of <, >, =.
       matcher :be_between_zero_and_nine do
+        match { |number| number.between?(0,9) }
       end
 
       # remove the 'x' before running this test
-      xit 'is a number between 0 and 9' do
+      it 'is a number between 0 and 9' do
+        solution = game.solution
+        expect(solution).to be_between_zero_and_nine
       end
     end
   end
@@ -77,9 +80,11 @@ describe NumberGame do
 
     # Create a new instance of NumberGame and write a test for when the @guess
     # does not equal @solution.
+    subject(:game_not_ended) {described_class.new(5, '3') }
     context 'when user guess is not correct' do
       # remove the 'x' before running this test
-      xit 'is not game over' do
+      it 'is not game over' do
+        expect(game_not_ended).not_to be_game_over
       end
     end
   end
@@ -107,7 +112,10 @@ describe NumberGame do
 
     # Write a test for the following context.
     context 'when given invalid input as argument' do
-      xit 'returns nil' do
+      it 'returns nil' do
+        letter_input = 'g'
+        verified_input = game_check.verify_input(letter_input)
+        expect(verified_input).to be_nil
       end
     end
   end
@@ -168,9 +176,15 @@ describe NumberGame do
     # Write a test for the following context.
     context 'when user inputs two incorrect values, then a valid input' do
       before do
+        letter = 'd'
+        symbol = '$'
+        valid_input = '2'
+        allow(game_loop).to receive(:player_input).and_return(letter, symbol, valid_input)
       end
 
-      xit 'completes loop and displays error message twice' do
+      it 'completes loop and displays error message twice' do
+        expect(game_loop).to receive(:puts).with('Input error!').twice
+        game_loop.player_turn
       end
     end
   end
@@ -201,8 +215,9 @@ describe NumberGame do
     # Create a new instance of NumberGame, with specific values for @solution,
     # @guess, and @count
     context 'when count is 2-3' do
+      subject(:game) { described_class.new(5, '5', 3)}
       # remove the 'x' before running this test
-      xit 'outputs correct phrase' do
+      it 'outputs correct phrase' do
         congrats_phrase = "Congratulations! You picked the random number in 3 guesses!\n"
         expect { game.final_message }.to output(congrats_phrase).to_stdout
       end
@@ -212,8 +227,11 @@ describe NumberGame do
 
     # Write a test for the following context.
     context 'when count is 4 and over' do
+      subject(:game) {described_class.new(5, '5', 7) }
       # remove the 'x' before running this test
-      xit 'outputs correct phrase' do
+      it 'outputs correct phrase' do
+        congrats_phrase = "That was hard. It took you 7 guesses!\n"
+        expect {game.final_message }.to output(congrats_phrase).to_stdout
       end
     end
   end
